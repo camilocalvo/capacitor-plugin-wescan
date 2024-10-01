@@ -10,14 +10,13 @@ public class WeScanPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "WeScanPlugin"
     public let jsName = "WeScan"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "scanDocument", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = WeScan()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
+    @objc func scanDocument(_ call: CAPPluginCall) {
         call.resolve([
-            "value": implementation.echo(value)
+            "value": implementation.echo("Test Echo")
         ])
     }
 }
