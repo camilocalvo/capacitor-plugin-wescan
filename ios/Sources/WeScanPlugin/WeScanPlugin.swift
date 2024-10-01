@@ -12,11 +12,19 @@ public class WeScanPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "scanDocument", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = WeScan()
+    
+    private var implementation: WeScan? = nil
 
     @objc func scanDocument(_ call: CAPPluginCall) {
-        call.resolve([
-            "value": implementation.echo("Test Echo")
-        ])
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            if let view = strongSelf.bridge?.viewController?.view {
+                strongSelf.implementation = WeScan(parentView: view, call: call)
+                strongSelf.implementation?.presentScanner()
+            }
+        }
     }
 }
